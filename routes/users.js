@@ -13,11 +13,45 @@ router.post('/register', (req, res, next) => {
     phone: req.body.phone,
     password: req.body.password
   });
+  isRegistered = false;
+  isPasswordValid = false;
+
+  if (newUser.password.length < 6) {
+    isPasswordValid = false;
+  }
+  else{
+    isPasswordValid = true;
+  }
+
+  User.findOne({ email: newUser.email }).then(user => {
+    if (user) {
+     console.log("already registered");
+     isRegistered = true;
+    }
+    else{
+    isRegistered = false;
+    }
+  }); 
+
+  function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
   User.addUser(newUser, (err, user) => {
     if(err){
       res.json({success: false, msg:'Failed to register user'});
-    } else {
+    } 
+    else if (!validateEmail(newUser.email)) {
+      res.json({success: false, msg:'Invalid Email'});
+    }
+    else if (isRegistered) {
+      res.json({success: false, msg:'User already registered'});
+    }
+    else if(!isPasswordValid){
+      res.json({success: false, msg:'Password Cannot be less than 6 characters'});
+    }
+    else if(!isRegistered){
       res.json({success: true, msg:'User registered'});
     }
   });
