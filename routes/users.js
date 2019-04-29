@@ -4,6 +4,9 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../model/users');
+const allowedUser = require('../model/allowedUsers');
+
+
 
 // Register
 router.post('/register', (req, res, next) => {
@@ -13,8 +16,18 @@ router.post('/register', (req, res, next) => {
     phone: req.body.phone,
     password: req.body.password
   });
+
+  let newAllowedUser = new allowedUser({
+    fullName: req.body.test,
+    email: req.body.email,
+    phone: req.body.phone,
+    password: req.body.password
+  });
+
+console.log (newUser.fullName+" "+newAllowedUser.fullName);
   isRegistered = false;
   isPasswordValid = false;
+  isAllowed = false;
 
   if (newUser.password.length < 6) {
     isPasswordValid = false;
@@ -23,15 +36,26 @@ router.post('/register', (req, res, next) => {
     isPasswordValid = true;
   }
 
+  
+  allowedUser.findOne({ email: newUser.email }).then(user => {
+    if (user) {
+     isAllowed = true;
+    }
+    else{
+      isAllowed = false;
+    }
+  }); 
+
   User.findOne({ email: newUser.email }).then(user => {
     if (user) {
-     console.log("already registered");
      isRegistered = true;
     }
     else{
     isRegistered = false;
     }
   }); 
+
+  
 
   function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -47,6 +71,9 @@ router.post('/register', (req, res, next) => {
     }
     else if (isRegistered) {
       res.json({success: false, msg:'User already registered'});
+    }
+    else if (!isAllowed) {
+      res.json({success: false, msg:'Email not allowed'});
     }
     else if(!isPasswordValid){
       res.json({success: false, msg:'Password Cannot be less than 6 characters'});
