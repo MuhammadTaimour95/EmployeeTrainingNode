@@ -75,6 +75,12 @@ console.log (newUser.fullName+" "+newAllowedUser.fullName);
     else if (!isAllowed) {
       res.json({success: false, msg:'Email not allowed'});
     }
+    else if(!phonenumber(newUser.phone)){
+      res.json({success: false, msg:'Invalid Phone Number'});
+    }
+    else if(!passwordStrength(temp)){
+      res.json({success: false, msg:'Password must contain atleast one upper case character, special character and a digit'});
+    }
     else if(!isPasswordValid){
       res.json({success: false, msg:'Password Cannot be less than 6 characters'});
     }
