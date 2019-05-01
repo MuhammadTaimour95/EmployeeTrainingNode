@@ -12,7 +12,7 @@ const Skills = require('../model/skills');
 isAllowed =false;
 
 // Register
-router.post('/register', (req, res, next) => {
+router.post('/register', async (req, res, next) => {
   let newUser = new User({
     fullName: req.body.fullName,
     email: req.body.email,
@@ -32,8 +32,8 @@ router.post('/register', (req, res, next) => {
  // if (user) {
  //  isAllowed = true;
  // }
-  
-//}); 
+
+//});
 
   isRegistered = false;
   isPasswordValid = false;
@@ -46,19 +46,19 @@ router.post('/register', (req, res, next) => {
     isPasswordValid = true;
   }
 
-  
-  
-  User.findOne({ email: newUser.email }).then(user => {
+
+
+  await User.findOne({ email: newUser.email }).then(user => {
     if (user) {
      isRegistered = true;
     }
     else{
     isRegistered = false;
     }
-  }); 
+  });
 
-  
 
+console.log('registered', isRegistered);
   function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -67,8 +67,8 @@ function phonenumber(inputtxt) {
   var phoneno = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
   if(inputtxt.match(phoneno)) {
     return true;
-  }  
-  else {  
+  }
+  else {
     return false;
   }
 }
@@ -76,8 +76,8 @@ function passwordStrength(inputtxt) {
   var temppassword = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,30}$/;
   if(req.body.password.match(temppassword)) {
     return true;
-  }  
-  else {  
+  }
+  else {
     return false;
   }
 }
@@ -89,15 +89,14 @@ function temp(){
      isAllowed = true;
      console.log(isAllowed + "middle");
      return true;
-    
+
     }
-  }); 
+  });
 }
 
 // Promise
 const willIGetNewPhone = new Promise(
     (resolve, reject) => {
-      
         if (validateEmail(newUser.email) && !isRegistered  && phonenumber(newUser.phone)
         && passwordStrength(temp) && isPasswordValid) {
           console.log("monday" + isRegistered);
@@ -116,11 +115,11 @@ const willIGetNewPhone = new Promise(
           const reason = new Error('User already registered');
           reject(reason);
         }
-  //      else if (!isAllowed) {
-   //       res.json({success: false, msg:'Email not allowed'});
-   //       const reason = new Error('Email not allowed');
-   //       reject(reason);
-   //     }
+        /* else if (!isAllowed) {
+          res.json({success: false, msg:'Email not allowed'});
+          const reason = new Error('Email not allowed');
+          reject(reason);
+        } */
         else if(!phonenumber(newUser.phone)){
           res.json({success: false, msg:'Invalid Phone Number'});
           const reason = new Error('Invalid Phone Number');
@@ -131,7 +130,7 @@ const willIGetNewPhone = new Promise(
           const reason = new Error('Password must contain atleast one upper case character, ');
           reject(reason);
         }
-        else if(!isPasswordValid){  
+        else if(!isPasswordValid){
         res.json({success: false, msg:'Password Cannot be less than 6 characters'});
         const reason = new Error('mom is not happy');
         reject(reason);
@@ -139,7 +138,7 @@ const willIGetNewPhone = new Promise(
             const reason = new Error('mom is not happy');
             res.json({success: false, msg:'Failed to register user'});
             reject(reason);
-            
+
         }
 
     }
@@ -156,9 +155,9 @@ async function showOff(phone) {
                   if(err){
                     console.log(err);
                     res.json({success: false, msg:'Failed to register user'});
-                  } 
+                  }
                   else {
-                    res.json({success: true, msg:'User registered'});
+                    res.json({success: true, msg:'User registered', user: user});
                   }
                 });
             resolve(message);
@@ -284,16 +283,16 @@ router.post('/addSkills', (req, res, next) => {
           name :  "Organization",
           experience : "Organization"
          }
-      
-     ] 
+
+     ]
   });
 
-  for (i = 0; i < req.body.skills.length; i++) { 
+  for (i = 0; i < req.body.skills.length; i++) {
     newSkills.skills[i].name = req.body.skills[i].name;
     newSkills.skills[i].experience = req.body.skills[i].experience;
   }
   newSkills.delete
-  
+
 console.log(req.body.skills.length);
   Skills.addSkills(newSkills, (err, skills) => {
     if(err){
