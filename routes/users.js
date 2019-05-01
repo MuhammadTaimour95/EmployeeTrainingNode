@@ -228,12 +228,52 @@ router.post('/addOrganization', (req, res, next) => {
 //Add Training
 router.post('/addTraining', (req, res, next) => {
   let newTraining = new Training({
-    title: req.body.title,
-    completionYear: req.body.completionYear,
-    duration : req.body.duration,
-    file :req.body.file,
-    userId : req.body.userId
+    training : [{
+      title :  "trainings",
+      completionYear : "trainings",
+      duration : "trainings",
+     file :"trainings"
+       },
+       {
+        title :  "trainings",
+        completionYear : "trainings",
+        duration : "trainings",
+       file :"trainings"
+         },
+         {
+          title :  "trainings",
+          completionYear : "trainings",
+          duration : "trainings",
+         file :"trainings"
+           },
+           {
+            title :  "trainings",
+            completionYear : "trainings",
+            duration : "trainings",
+           file :"trainings"
+             },
+             {
+              title :  "trainings",
+              completionYear : "trainings",
+              duration : "trainings",
+             file :"trainings"
+               }
+      ]
   });
+
+
+  numTraining = newTraining.training.length;
+  while(req.body.training.length < numTraining){
+    newTraining.training.pop();
+    numTraining--;
+  }
+
+  for (i = 0; i < req.body.training.length; i++) { 
+      newTraining.training[i].title = req.body.training[i].title;
+      newTraining.training[i].completionYear = req.body.training[i].completionYear;
+      newTraining.training[i].duration = req.body.training[i].duration;
+      newTraining.training[i].file = req.body.training[i].file;
+  }
 
   Training.addTraining(newTraining, (err, user) => {
     if(err){
@@ -250,35 +290,40 @@ router.post('/addTraining', (req, res, next) => {
 router.post('/addSkills', (req, res, next) => {
   let newSkills = new Skills({
     skills : [{
-      name :  "Organization",
-      experience : "Organization"
+      name :  "skills",
+      experience : "skills"
        },
        {
-        name :  "Organization",
-        experience : "Organization"
+        name :  "skills",
+        experience : "skills"
        },
        {
-        name :  "Organization",
-        experience : "Organization"
+        name :  "skills",
+        experience : "skills"
        },
        {
-        name :  "Organization",
-        experience : "Organization"
+        name :  "skills",
+        experience : "skills"
        },
         {
-          name :  "Organization",
-          experience : "Organization"
+          name :  "skills",
+          experience : "skills"
          }
-
-     ]
+      
+     ] 
   });
 
-  for (i = 0; i < req.body.skills.length; i++) {
+  num = newSkills.skills.length;
+  while(req.body.skills.length < num){
+    newSkills.skills.pop();
+    num--;
+  }
+
+  for (i = 0; i < req.body.skills.length; i++) { 
     newSkills.skills[i].name = req.body.skills[i].name;
     newSkills.skills[i].experience = req.body.skills[i].experience;
   }
-  newSkills.delete
-
+   
 console.log(req.body.skills.length);
   Skills.addSkills(newSkills, (err, skills) => {
     if(err){

@@ -4,26 +4,12 @@ const config = require('../config/database');
 
 // User Schema
 const trainingSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  completionYear: {
-    type: String,
-    required: false
-  },
-  duration: {
-    type: String,
-    required: false
-  },
-  file: {
-    type: String,
-    required: false
-  },
-  userId: {
-    type: String,
-    required: false
-  }
+    training : [{
+        title : String,
+        completionYear : String,
+        duration : String,
+        file: String
+         }]
 });
 
 const Training = module.exports = mongoose.model('training', trainingSchema);
