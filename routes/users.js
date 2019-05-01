@@ -259,6 +259,8 @@ router.post('/addTraining', (req, res, next) => {
              file :"trainings"
                }
       ]
+      ,
+     userId: req.headers.userid
   });
 
 
@@ -274,6 +276,7 @@ router.post('/addTraining', (req, res, next) => {
       newTraining.training[i].duration = req.body.training[i].duration;
       newTraining.training[i].file = req.body.training[i].file;
   }
+
 
   Training.addTraining(newTraining, (err, user) => {
     if(err){
@@ -310,9 +313,10 @@ router.post('/addSkills', (req, res, next) => {
           experience : "skills"
          }
       
-     ] 
+     ],
+     userId: req.headers.userid
   });
-
+  
   num = newSkills.skills.length;
   while(req.body.skills.length < num){
     newSkills.skills.pop();
@@ -382,9 +386,59 @@ router.post('/editProfile', (req, res, next) => {
     
 });
 
+//Get request Here
+
+//getProfile
+router.get('/getProfile', (req, res, next) => {
+  User.getUserById( req.headers.userid, (err, user) => {
+    if(err) throw err;
+    if(!user){
+      return res.json({success: false, msg: 'User not found'});
+    }
+    else{
+      return res.json(user);
+    }
+});
+});
+
+//Get skills
+router.get('/getSkills', (req, res, next) => {
+  Skills.getSkillsByUserId( req.headers.userid, (err, skills) => {
+    if(err) throw err;
+    if(!skills){
+      return res.json({success: false, msg: 'Skills not found for the given user.'});
+    }
+    else{
+      return res.json(skills.skills);
+    }
+});
+});
+
+//Get training
+router.get('/getTrainings', (req, res, next) => {
+  Training.getTrainingsByUserId( req.headers.userid, (err, trainings) => {
+    if(err) throw err;
+    if(!trainings){
+      return res.json({success: false, msg: 'Trainings not found for the given user.'});
+    }
+    else{
+      return res.json(trainings.training);
+    }
+});
+});
+
+
+
+
 // Profile
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   res.json({user: req.user});
 });
+
+
+
+
+
+
 
 module.exports = router;

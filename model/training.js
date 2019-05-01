@@ -9,7 +9,8 @@ const trainingSchema = mongoose.Schema({
         completionYear : String,
         duration : String,
         file: String
-         }]
+         }],
+         userId: String   
 });
 
 const Training = module.exports = mongoose.model('training', trainingSchema);
@@ -18,6 +19,10 @@ module.exports.getTrainingById = function(id, callback){
   Training.findById(id, callback);
 }
 
+module.exports.getTrainingsByUserId = function(userId, callback){
+  const query = {userId: userId}
+  Training.findOne(query, callback);
+  }
 
 module.exports.getTrainingByName = function(name, callback){
 const query = {name: name}
