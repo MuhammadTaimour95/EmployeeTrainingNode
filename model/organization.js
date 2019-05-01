@@ -3,31 +3,16 @@ const bcrypt = require('bcryptjs');
 const config = require('../config/database');
 
 // User Schema
+
+
 const organizationSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  title: {
-    type: String,
-    required: false
-  },
-  experience: {
-    type: String,
-    required: false
-  },
-  fromDate: {
-    type: Date,
-    required: false
-  },
-  toDate: {
-    type: Date,
-    required: false
-  },
-  userId: {
-    type: String,
-    required: false
-  }
+  organization : [{
+      name : String,
+      title : String,
+      experience : String,
+      fromDate : Date,
+      toDate: Date
+       }]   
 });
 
 const Organization = module.exports = mongoose.model('organization', organizationSchema);

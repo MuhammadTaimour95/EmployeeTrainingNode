@@ -193,35 +193,68 @@ function tempy(subject, callback) {
   callback();
 }
 function alertFinished(){
-  console.log('Finished my homework');
   (async () => {
       await askMom();
    })();
 }
 tempy('math', alertFinished);
-
-console.log("tuesday" + isRegistered)
 });
 
 //Add Organization
 router.post('/addOrganization', (req, res, next) => {
-  let newOrganization = new Organization({
+  /*let newOrganization = new Organization({
     name: req.body.name,
     title: req.body.title,
     phone: req.body.experience,
     fromdate : req.body.fromDate,
     toDate :req.body.toDate,
     userId : req.body.userId
+  });*/
+
+
+  let newOrganization = new Organization({
+    organization : [{
+      name :  "trainings",
+      title : "trainings",
+      experience : "trainings",
+      fromDate : null,
+      toDate : null
+       }
+      ]
+      
   });
 
-  Organization.addOrganization(newOrganization, (err, user) => {
+  newOrganization.organization.push({
+    name :  "trainings",
+    title : "trainings",
+    experience : "trainings",
+    fromDate : null,
+    toDate : null
+     });
+
+   console.log(newOrganization) ;
+ /* numTraining = newTraining.training.length;
+  while(req.body.training.length < numTraining){
+    newTraining.training.pop();
+    numTraining--;
+  }
+
+  for (i = 0; i < req.body.training.length; i++) { 
+      newTraining.training[i].title = req.body.training[i].title;
+      newTraining.training[i].completionYear = req.body.training[i].completionYear;
+      newTraining.training[i].duration = req.body.training[i].duration;
+      newTraining.training[i].file = req.body.training[i].file;
+  }
+
+
+  Training.addTraining(newTraining, (err, user) => {
     if(err){
       console.log(err);
-      res.json({success: false, msg:'Failed to Add Organization'});
+      res.json({success: false, msg:'Failed to Add training'});
     } else {
-      res.json({success: true, msg:'Organization Added'});
+      res.json({success: true, msg:'Training Added'});
     }
-  });
+  });*/
 });
 
 
@@ -374,7 +407,7 @@ router.post('/authenticate', (req, res, next) => {
   });
 });
 
-// Add Profile
+// Edit Profile
 router.post('/editProfile', (req, res, next) => {
 
   var myquery = { _id: req.headers.userid};
@@ -423,6 +456,32 @@ router.get('/getTrainings', (req, res, next) => {
     }
     else{
       return res.json(trainings.training);
+    }
+});
+});
+
+//getListOfRegisteredUsers
+router.get('/getListOfAllRegisteredUsers', (req, res, next) => {
+  User.find(  (err, user) => {
+    if(err) throw err;
+    if(!user){
+      return res.json({success: false, msg: 'No Registered Users Found.'});
+    }
+    else{
+      return res.json(user);
+    }
+});
+});
+
+//getListOfTrainings
+router.get('/getListOfAllTrainings', (req, res, next) => {
+  Training.find(  (err, user) => {
+    if(err) throw err;
+    if(!user){
+      return res.json({success: false, msg: 'No Trainings Found.'});
+    }
+    else{
+      return res.json(user);
     }
 });
 });
