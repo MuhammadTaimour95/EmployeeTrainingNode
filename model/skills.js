@@ -29,7 +29,6 @@ module.exports.getSkillsByUserId = function(userId, callback){
     }
 
 module.exports.addSkills = function(newSkills, callback){ 
-    console.log(newSkills);
       newSkills.save(callback);
 }
 

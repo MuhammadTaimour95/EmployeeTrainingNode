@@ -12,7 +12,8 @@ const organizationSchema = mongoose.Schema({
       experience : String,
       fromDate : Date,
       toDate: Date
-       }]   
+       }] ,
+       userId: String  
 });
 
 const Organization = module.exports = mongoose.model('organization', organizationSchema);

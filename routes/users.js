@@ -87,7 +87,6 @@ function temp(){
   allowedUser.findOne({ email: newUser.email }).then(user => {
     if (user) {
      isAllowed = true;
-     console.log(isAllowed + "middle");
      return true;
 
     }
@@ -99,7 +98,6 @@ const willIGetNewPhone = new Promise(
     (resolve, reject) => {
         if (validateEmail(newUser.email) && !isRegistered && isAllowed && phonenumber(newUser.phone)
         && passwordStrength(temp) && isPasswordValid) {
-          console.log("monday" + isRegistered);
             const phone = {
                 brand: 'Samsung',
                 color: 'blacccck'
@@ -202,116 +200,75 @@ tempy('math', alertFinished);
 
 //Add Organization
 router.post('/addOrganization', (req, res, next) => {
-  /*let newOrganization = new Organization({
-    name: req.body.name,
-    title: req.body.title,
-    phone: req.body.experience,
-    fromdate : req.body.fromDate,
-    toDate :req.body.toDate,
-    userId : req.body.userId
-  });*/
-
+  
 
   let newOrganization = new Organization({
-    organization : [{
-      name :  "trainings",
-      title : "trainings",
-      experience : "trainings",
-      fromDate : null,
-      toDate : null
-       }
-      ]
-      
+    organization : [ ],
+    userId: req.headers.userid      
   });
 
+  
+  for (i = 0; i < req.body.organization.length; i++) { 
   newOrganization.organization.push({
-    name :  "trainings",
-    title : "trainings",
-    experience : "trainings",
-    fromDate : null,
-    toDate : null
+    name :  req.body.organization[i].name,
+    title : req.body.organization[i].title,
+    experience : req.body.organization[i].experience,
+    fromDate : req.body.organization[i].fromDate,
+    toDate : req.body.organization[i].toDate
      });
+    }
 
-   console.log(newOrganization) ;
- /* numTraining = newTraining.training.length;
-  while(req.body.training.length < numTraining){
-    newTraining.training.pop();
-    numTraining--;
-  }
-
-  for (i = 0; i < req.body.training.length; i++) { 
-      newTraining.training[i].title = req.body.training[i].title;
-      newTraining.training[i].completionYear = req.body.training[i].completionYear;
-      newTraining.training[i].duration = req.body.training[i].duration;
-      newTraining.training[i].file = req.body.training[i].file;
-  }
+    Organization.findOneAndDelete( req.headers.userid, (err, organization) => {
+      if(err) throw err;
+      if(!organization){
+        console.log("Record Not Deleted");
+      }
+      else{
+        console.log("Record Deleted");
+      }
+  });
 
 
-  Training.addTraining(newTraining, (err, user) => {
+  Organization.addOrganization(newOrganization, (err, organization) => {
     if(err){
       console.log(err);
-      res.json({success: false, msg:'Failed to Add training'});
+      res.json({success: false, msg:'Failed to Add Organization'});
     } else {
-      res.json({success: true, msg:'Training Added'});
+      res.json({success: true, msg:'Organization Added'});
     }
-  });*/
+  });
 });
 
 
 //Add Training
 router.post('/addTraining', (req, res, next) => {
   let newTraining = new Training({
-    training : [{
-      title :  "trainings",
-      completionYear : "trainings",
-      duration : "trainings",
-     file :"trainings"
-       },
-       {
-        title :  "trainings",
-        completionYear : "trainings",
-        duration : "trainings",
-       file :"trainings"
-         },
-         {
-          title :  "trainings",
-          completionYear : "trainings",
-          duration : "trainings",
-         file :"trainings"
-           },
-           {
-            title :  "trainings",
-            completionYear : "trainings",
-            duration : "trainings",
-           file :"trainings"
-             },
-             {
-              title :  "trainings",
-              completionYear : "trainings",
-              duration : "trainings",
-             file :"trainings"
-               }
-      ]
+    training : []
       ,
      userId: req.headers.userid
   });
 
-
-  numTraining = newTraining.training.length;
-  while(req.body.training.length < numTraining){
-    newTraining.training.pop();
-    numTraining--;
-  }
+  Training.findOneAndDelete( req.headers.userid, (err, training) => {
+    if(err) throw err;
+    if(!training){
+      console.log("Record Not Deleted");
+    }
+    else{
+      console.log("Record Deleted");
+    }
+});
 
   for (i = 0; i < req.body.training.length; i++) { 
-      newTraining.training[i].title = req.body.training[i].title;
-      newTraining.training[i].completionYear = req.body.training[i].completionYear;
-      newTraining.training[i].duration = req.body.training[i].duration;
-      newTraining.training[i].file = req.body.training[i].file;
-  }
+    newTraining.training.push({
+      title : req.body.training[i].title,
+      completionYear : req.body.training[i].completionYear,
+      duration : req.body.training[i].duration,
+      file : req.body.training[i].file
+       });
+      }
 
 
-  Training.addTraining(newTraining, (err, user) => {
+  Training.addTraining(newTraining, (err, training) => {
     if(err){
       console.log(err);
       res.json({success: false, msg:'Failed to Add training'});
@@ -325,43 +282,27 @@ router.post('/addTraining', (req, res, next) => {
 //Add Skills
 router.post('/addSkills', (req, res, next) => {
   let newSkills = new Skills({
-    skills : [{
-      name :  "skills",
-      experience : "skills"
-       },
-       {
-        name :  "skills",
-        experience : "skills"
-       },
-       {
-        name :  "skills",
-        experience : "skills"
-       },
-       {
-        name :  "skills",
-        experience : "skills"
-       },
-        {
-          name :  "skills",
-          experience : "skills"
-         }
-      
-     ],
+    skills : [],
      userId: req.headers.userid
   });
   
-  num = newSkills.skills.length;
-  while(req.body.skills.length < num){
-    newSkills.skills.pop();
-    num--;
-  }
+  Skills.findOneAndDelete( req.headers.userid, (err, skills) => {
+    if(err) throw err;
+    if(!skills){
+      console.log("Record Not Deleted");
+    }
+    else{
+      console.log("Record Deleted");
+    }
+});
 
   for (i = 0; i < req.body.skills.length; i++) { 
-    newSkills.skills[i].name = req.body.skills[i].name;
-    newSkills.skills[i].experience = req.body.skills[i].experience;
-  }
+    newSkills.skills.push({
+      name : req.body.skills[i].title,
+      experience : req.body.skills[i].experience
+       });
+      }
    
-console.log(req.body.skills.length);
   Skills.addSkills(newSkills, (err, skills) => {
     if(err){
       res.json({success: false, msg:'Failed to Add skills'});
@@ -486,7 +427,18 @@ router.get('/getListOfAllTrainings', (req, res, next) => {
 });
 });
 
-
+//getListOfOrganizations
+router.get('/getListOfAllOrganizations', (req, res, next) => {
+  Organization.find(  (err, organization) => {
+    if(err) throw err;
+    if(!organization){
+      return res.json({success: false, msg: 'No Organizations Found.'});
+    }
+    else{
+      return res.json(organization);
+    }
+});
+});
 
 
 // Profile
