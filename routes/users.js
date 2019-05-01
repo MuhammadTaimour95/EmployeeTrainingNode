@@ -371,39 +371,15 @@ router.post('/authenticate', (req, res, next) => {
 });
 
 // Add Profile
-router.post('/addProfile', (req, res, next) => {
-  const email = req.body.email;
-  const fullName = req.body.fullName;
-  const password = req.body.password;
+router.post('/editProfile', (req, res, next) => {
 
-  User.getUserByEmail(email, (err, user) => {
-    if(err) throw err;
-    if(!user){
-      return res.json({success: false, msg: 'User not found'});
-    }
-
-    User.comparePassword(password, user.password, (err, isMatch) => {
-      if(err) throw err;
-      if(isMatch){
-        const token = jwt.sign(user.toJSON(), config.secret, {
-            expiresIn: 604800 // 1 week
-          });
-
-        res.json({
-          success: true,
-          token: 'JWT '+token,
-          user: {
-            id: user._id,
-            fullName: user.fullName,
-            phone: user.phone,
-            email: user.email
-          }
-        });
-      } else {
-        return res.json({success: false, msg: 'Wrong password'});
-      }
-    });
+  var myquery = { _id: req.headers.userid};
+  var newvalues = { fullName: req.body.fullName, phone: req.body.phone , image: req.body.image};
+  User.updateOne(myquery, newvalues, function(err, res ) {
+    if (err) throw err; 
   });
+  return res.json({success: true, msg:'Profile Updated'});
+    
 });
 
 // Profile
