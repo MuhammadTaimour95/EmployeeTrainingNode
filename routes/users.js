@@ -28,12 +28,12 @@ router.post('/register', async (req, res, next) => {
     password: req.body.password
   });
 
-//allowedUser.findOne({ email: newUser.email }).then(user => {
- // if (user) {
- //  isAllowed = true;
- // }
+allowedUser.findOne({ email: newUser.email }).then(user => {
+    if (user) {
+     isAllowed = true;
+  }
 
-//});
+});
 
   isRegistered = false;
   isPasswordValid = false;
@@ -97,12 +97,12 @@ function temp(){
 // Promise
 const willIGetNewPhone = new Promise(
     (resolve, reject) => {
-        if (validateEmail(newUser.email) && !isRegistered  && phonenumber(newUser.phone)
+        if (validateEmail(newUser.email) && !isRegistered && isAllowed && phonenumber(newUser.phone)
         && passwordStrength(temp) && isPasswordValid) {
           console.log("monday" + isRegistered);
             const phone = {
                 brand: 'Samsung',
-                color: 'black'
+                color: 'blacccck'
             };
             resolve(phone);
         }else if (!validateEmail(newUser.email)) {
@@ -115,19 +115,19 @@ const willIGetNewPhone = new Promise(
           const reason = new Error('User already registered');
           reject(reason);
         }
-        /* else if (!isAllowed) {
+         else if (!isAllowed) {
           res.json({success: false, msg:'Email not allowed'});
           const reason = new Error('Email not allowed');
           reject(reason);
-        } */
+        }
         else if(!phonenumber(newUser.phone)){
           res.json({success: false, msg:'Invalid Phone Number'});
           const reason = new Error('Invalid Phone Number');
           reject(reason);
         }
         else if(!passwordStrength(temp)){
-          res.json({success: false, msg:'Password must contain atleast one upper case character, special character and a digit'});
-          const reason = new Error('Password must contain atleast one upper case character, ');
+          res.json({success: false, msg:'Password should be atleast 8 characters long with a capital letter, small letter, special character and a number.'});
+          const reason = new Error('Password should be atleast 8 characters long with a capital letter, small letter, special character and a number.');
           reject(reason);
         }
         else if(!isPasswordValid){
@@ -168,32 +168,18 @@ async function showOff(phone) {
 // call our promise
 async function askMom() {
     try {
-        console.log('before asking Mom');
-
-        console.log(isAllowed);
         let phone = await willIGetNewPhone;
-        let message = await showOff(phone);
-
-        console.log(message);
-        console.log('after asking mom');
+        let message = await showOff(phone); 
     }
     catch (error) {
         console.log(error.message);
     }
 }
 
-//(async () => {
- //  temp();
-//})();
-//(async () => {
- //   await askMom();
-//})();
 function tempy(subject, callback) {
-  console.log(`Starting my ${subject} homework.`);
   allowedUser.getUserByEmail(newUser.email, (err, user) => {
     if(err) throw err;
     if(user){
-      console.log("user present");
       isAllowed = true;
       (async () => {
         await askMom();
@@ -203,7 +189,7 @@ function tempy(subject, callback) {
       console.log("user not present");
     }
   });
- // console.log(isAllowed + "ddsd");
+ 
   callback();
 }
 function alertFinished(){
