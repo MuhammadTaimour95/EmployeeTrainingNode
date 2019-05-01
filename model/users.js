@@ -17,6 +17,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  organizationName: {
+    type: String,
+    required: false
+  },
   password: {
     type: String,
     required: true
@@ -54,6 +58,11 @@ module.exports.getUserById = function(id, callback){
 module.exports.getUserByEmail = function(email, callback){
   const query = {email: email}
   User.findOne(query, callback);
+}
+
+module.exports.getUserByEmaill = function(email){
+  const query = {email: email}
+  User.findOne(query);
 }
 
 module.exports.addUser = function(newUser, callback){ 
