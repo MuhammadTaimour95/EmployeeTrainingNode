@@ -24,32 +24,17 @@ const UserSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
-});
-
-// User Schema
-const allowedUserSchema = mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  phone: {
-    type: String,
-    required: false
-  },
-  password: {
-    type: String,
-    required: true
   },
   image: {
     type: String,
     required: false
+  },
+  isAdmin: {
+    type: Boolean,
+    required: false
   }
 });
+
 
 const User = module.exports = mongoose.model('User', UserSchema);
 //const allowedUser = module.exports = mongoose.model('allowedUser', allowedUserSchema);

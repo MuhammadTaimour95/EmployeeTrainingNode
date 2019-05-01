@@ -19,6 +19,10 @@ const allowedUsersSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  isAdmin: {
+    type: Boolean,
+    required: false
   }
 });
 

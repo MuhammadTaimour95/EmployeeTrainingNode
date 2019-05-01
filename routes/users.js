@@ -18,19 +18,23 @@ router.post('/register', async (req, res, next) => {
     email: req.body.email,
     phone: req.body.phone,
     organizationName : req.body.organizationName,
-    password: req.body.password
+    password: req.body.password,
+    isAdmin: false    
   });
 
   let newAllowedUser = new allowedUser({
     fullName: req.body.test,
     email: req.body.email,
     phone: req.body.phone,
-    password: req.body.password
+    password: req.body.password,
+    isAdmin: false 
   });
 
 allowedUser.findOne({ email: newUser.email }).then(user => {
     if (user) {
      isAllowed = true;
+     newUser.isAdmin = user.isAdmin;
+     console.log( newUser.isAdmin+" Between "+user.isAdmin);
   }
 
 });
@@ -155,6 +159,7 @@ async function showOff(phone) {
                     res.json({success: false, msg:'Failed to register user'});
                   }
                   else {
+                    console.log( newUser.isAdmin+" Between "+user.isAdmin);
                     res.json({success: true, msg:'User registered', user: user});
                   }
                 });
@@ -174,7 +179,14 @@ async function askMom() {
     }
 }
 
-function tempy(subject, callback) {
+(async () => {
+  await askMom();
+})();
+
+
+
+
+/*function tempy(subject, callback) {
   allowedUser.getUserByEmail(newUser.email, (err, user) => {
     if(err) throw err;
     if(user){
@@ -196,6 +208,7 @@ function alertFinished(){
    })();
 }
 tempy('math', alertFinished);
+*/
 });
 
 //Add Organization
@@ -338,7 +351,8 @@ router.post('/authenticate', (req, res, next) => {
             id: user._id,
             fullName: user.fullName,
             phone: user.phone,
-            email: user.email
+            email: user.email,
+            isAdmin: user.isAdmin
           }
         });
       } else {
@@ -459,10 +473,6 @@ router.get('/getListOfAllOrganizations', (req, res, next) => {
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
   res.json({user: req.user});
 });
-
-
-
-
 
 
 
