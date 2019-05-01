@@ -1,0 +1,9 @@
+<div>
+  <app-navigation></app-navigation>
+  <app-post-create (postCreated)="OnPostAdded(#event)"></app-post-create>
+  <div class="container">
+    <router-outlet></router-outlet>
+    <!-- <div class="col-md-1 side-nav">
+      </div> -->
+  </div>
+</div>

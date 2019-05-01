@@ -1,0 +1,197 @@
+<div class="container margin-10 col-md-12" *ngIf="userObj">
+  <h3>Profile</h3>
+  <div class="row profile col-md-10">
+    <div class="col-md-1 col-sm-2 col-xs-2">
+      <img *ngIf="userObj.picture" [src]="userObj.picture" alt="Avatar" class="avatar">
+      <img *ngIf="!userObj.picture" src="../../../assets/img_avatar.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="col-md-8 col-xs-8">
+      <label>Name: {{userObj.name}}</label><br>
+      <label>Email: {{userObj.email}}</label><br>
+      <label>Phone: {{userObj.phone}}</label>
+    </div>
+  </div>
+  <div class="panel panel-default col-md-12 col-sm-12 col-xs-12">
+    <div class="panel-heading">
+      <ul class="nav nav-pills nav-justified" role="tablist" #tabList>
+        <li class="active" role="tab" data-toggle="basic">
+          <a href="#" onclick="return false" (click)="openTab('basic',$event)">Basic Information</a>
+        </li>
+        <li role="tab" data-toggle="company">
+          <a href="#" onclick="return false" (click)="openTab('company',$event)">Company Details</a>
+        </li>
+        <li role="tab" data-toggle="skills">
+          <a href="#" onclick="return false" (click)="openTab('skills',$event)">Skills</a>
+        </li>
+        <li role="tab" data-toggle="trainings">
+          <a href="#" onclick="return false" (click)="openTab('trainings',$event)">Trainings</a>
+        </li>
+      </ul>
+    </div>
+    <div class="panel-body tab-content" #allTabs>
+      <div id="basic" class="tab-pane fade in active">
+        <form #userForm="ngForm" (submit)="update(userForm)">
+          <div class="form-group">
+            <label for="email">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" ngModel [(ngModel)]="userObj.name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" id="email" name="email" ngModel [(ngModel)]="userObj.email"
+              readonly>
+          </div>
+          <div class="form-group">
+            <label for="email">Phone:</label>
+            <input type="text" class="form-control" id="phone" name="phone" ngModel [(ngModel)]="userObj.phone"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="email">Upload Picture:</label>
+            <input type="file" id="profile" name="profile" ngModel [(ngModel)]="userObj.profile">
+          </div>
+          <div class="form-group col-md-offset-9 col-sm-offset-7">
+            <button [disabled]="requestInProgress" type="submit" class="btn btn-default btn-login btn-lg
+              btn-primary signup-btn col-md-offset-3 col-sm-offset-3 btn-save">Save</button>
+            <button class="btn btn-default btn-login btn-lg btn-default signup-btn" [disabled]="requestInProgress"
+              type="button" (click)="openTab('company',$event)">Next</button>
+          </div>
+        </form>
+      </div>
+      <div id="company" class="tab-pane fade">
+        <form #companyForm="ngForm" (submit)="updateCompany(companyForm)">
+          <div class="form-group">
+            <label for="name">Company Name:</label>
+            <input type="text" class="form-control" id="name" name="name" ngModel [(ngModel)]="companyObj.name"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="title">Job Title:</label>
+            <input type="text" class="form-control" id="title" name="title" ngModel [(ngModel)]="companyObj.title"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="experience">Experience:</label>
+            <select [(ngModel)]="companyObj.experience" name="experience" class="form-control" required>
+              <option value="null">Select Value</option>
+              <option *ngFor="let exp of arrExperience" [value]="exp">{{exp}}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-offset-9 col-sm-offset-7">
+            <button [disabled]="requestInProgress" type="submit" class="btn btn-default btn-login btn-lg
+              btn-primary signup-btn col-md-offset-3 col-sm-offset-3 btn-save">Save</button>
+            <button class="btn btn-default btn-login btn-lg btn-default signup-btn" [disabled]="requestInProgress"
+              type="button" (click)="openTab('skills',$event)">Next</button>
+          </div>
+        </form>
+      </div>
+      <div id="skills" class="tab-pane fade">
+        <div class="form-group col-md-12 col-xs-12" *ngIf="arrSkills && arrSkills.length">
+          <div class="skill-div col-md-5 col-xs-12" *ngFor="let skill of arrSkills; let i= index">
+            <span style="font-size:16px">{{skill.name}} -- {{skill.experience}}</span>
+            <div class="action-div">
+              <a href="#" onclick="return false" (click)="editSkill(skill,i)" style="margin-right: 20%;"><i
+                  class="fa fa-edit"></i></a>
+              <a href="#" onclick="return false" (click)="delSkill(i)"><i class="fa fa-trash"></i></a>
+            </div>
+          </div>
+        </div>
+        <a href="#" onclick="return false" (click)="showSkillsFun()">Add New Skill</a>
+        <form #skillsForm="ngForm" (submit)="updateSkills(skillsForm)" *ngIf="showSkills" class="skill-form">
+          <div class="form-group">
+            <label for="name">Skill:</label>
+            <select [(ngModel)]="skillObj.name" name="name" class="form-control" required>
+              <option value="null">Select Value</option>
+              <option *ngFor="let exp of arrAllSkills" [value]="exp">{{exp}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="experience">Experience:</label>
+            <select [(ngModel)]="skillObj.experience" name="experience" class="form-control" required>
+              <option value="null">Select Value</option>
+              <option *ngFor="let exp of arrExperience" [value]="exp">{{exp}}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-offset-9 col-sm-offset-7">
+            <button [disabled]="requestInProgress" type="submit" class="btn btn-default btn-login btn-lg
+              btn-primary signup-btn col-md-offset-3 col-sm-offset-3 btn-save">Save</button>
+              <button class="btn btn-default btn-login btn-lg btn-default signup-btn" [disabled]="requestInProgress"
+              type="button" (click)="openTab('trainings',$event)">Next</button>
+          </div>
+        </form>
+        <div class="skill-form" *ngIf="!showSkills">
+          <div class=" col-md-offset-9 col-sm-offset-7">
+          <button class="btn btn-default btn-login btn-lg btn-default signup-btn" [disabled]="requestInProgress"
+          type="button" (click)="openTab('trainings',$event)">Next</button>
+          </div>
+        </div>
+      </div>
+      <div id="trainings" class="tab-pane fade">
+        <table class="table table-bordered table-hover " *ngIf="allTrainings && allTrainings.length">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Title</th>
+              <th>Duration</th>
+              <th>Year Of Completion</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let training of allTrainings;let i = index;">
+              <td>{{training.id}}</td>
+              <td>{{training.title}}</td>
+              <td>{{training.duration}}</td>
+              <td>{{training.completion_year}}</td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" (click)="openActionDrpDown()">
+                    Action
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu fade" style="display:block" #drpDownMenu>
+                    <li class="anchor" *ngIf="training.file">
+                      <a href="javascript:void(0);" (click)="downloadCertificate(training,i)">Edit</a>
+                    </li>
+                    <li class="anchor">
+                      <a href="javascript:void(0);" (click)="editTraining(training,i)">Edit</a>
+                    </li>
+                    <li class="anchor">
+                      <a href="javascript:void(0);" (click)="removeTraining(training,i)">Delete</a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a href="#" onclick="return false" (click)="showTrainingsForm()">Add New Training</a>
+        <form #TrainingsForm="ngForm" (submit)="updateTrainings(TrainingsForm)" *ngIf="showTrainings"
+          class="skill-form">
+          <div class="form-group">
+            <label for="name">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" ngModel [(ngModel)]="trainingObj.title"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="experience">Duration:</label>
+            <input [(ngModel)]="trainingObj.duration" id="duration" name="duration" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="experience">Year of Completion:</label>
+            <input type="number" [(ngModel)]="trainingObj.completion_year" id="completion_year" name="completion_year"
+              class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Upload Certificate:</label>
+            <input type="file" id="file" name="file" ngModel [(ngModel)]="trainingObj.file">
+          </div>
+          <div class="form-group col-md-offset-9 col-sm-offset-7">
+            <button [disabled]="requestInProgress" type="submit" class="btn btn-default btn-login btn-lg
+              btn-primary signup-btn col-md-offset-3 col-sm-offset-3 btn-save">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

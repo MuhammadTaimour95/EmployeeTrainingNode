@@ -1,0 +1,16 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="auth-btn" *ngIf="!isLoggedIn">
+    <button class="btn btn-default btn-nav" style="margin-right: 30px;" (click)="routeTo('login')">Login</button>
+    <button class="btn btn-default btn-nav" (click)="routeTo('signup')">Signup</button>
+  </div>
+  <div class="auth-btn" *ngIf="isLoggedIn">
+    <a href="#" onclick="return false;" (click)="showList = !showList" class="dropdown">
+      <i class="fa fa-2x fa-user-circle profile-icon"></i>
+    </a>
+    <ul class="dropdown-menu" *ngIf="showList">
+      <li><a href="#" onclick="return false;" (click)="routeTo('profile')">Profile</a></li>
+      <li class="section"></li>
+      <li> <a href="#" onclick="return false;" (click)="logoutUser()">Logout</a></li>
+    </ul>
+  </div>
+</nav>

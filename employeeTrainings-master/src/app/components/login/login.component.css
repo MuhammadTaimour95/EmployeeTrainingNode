@@ -1,0 +1,13 @@
+.btn-login {
+    /* background: #d96e21 !important; */
+    color: #fff !important;
+    outline: none !important;
+    border: none;
+  }
+.container-content {
+    max-width: 22.5em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0.75em;
+    margin-top: 5%;
+ }

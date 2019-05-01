@@ -1,0 +1,29 @@
+.avatar {
+    vertical-align: middle;
+    width: 100%;
+    /* height: 15%; */
+    border-radius: 50%;
+}
+.profile{
+    float: right;
+}
+.panel-default{
+    padding: 0;
+    margin: 2%;
+}
+.skill-form{
+  margin: 2% 0;
+}
+.btn-save{
+  margin-right: 10%;
+}
+.skill-div{
+  border: 3px solid #f0f0f0;
+  margin: 2px 8px;
+  padding: 5px 3px;
+}
+.action-div{
+  float: right;
+  width: 15%;
+  font-size: 21px;
+}
