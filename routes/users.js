@@ -401,6 +401,20 @@ router.get('/getTrainings', (req, res, next) => {
 });
 });
 
+//Get Organization
+router.get('/getOrganization', (req, res, next) => {
+  Organization.getOrganizationByUserId( req.headers.userid, (err, organization) => {
+    if(err) throw err;
+    if(!organization){
+      return res.json({success: false, msg: 'Organization not found for the given user.'});
+    }
+    else{
+      return res.json(organization.organization);
+    }
+});
+});
+
+
 //getListOfRegisteredUsers
 router.get('/getListOfAllRegisteredUsers', (req, res, next) => {
   User.find(  (err, user) => {

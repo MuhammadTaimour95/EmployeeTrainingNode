@@ -21,6 +21,10 @@ const Organization = module.exports = mongoose.model('organization', organizatio
 module.exports.getOrganizationById = function(id, callback){
   Organization.findById(id, callback);
 }
+module.exports.getOrganizationByUserId = function(userId, callback){
+  const query = {userId: userId}
+  Organization.findOne(query, callback);
+  }
 
 
 module.exports.getOrganizationByName = function(name, callback){
