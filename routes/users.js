@@ -311,7 +311,7 @@ router.post('/addSkills', (req, res, next) => {
 
   for (i = 0; i < req.body.skills.length; i++) { 
     newSkills.skills.push({
-      name : req.body.skills[i].title,
+      name : req.body.skills[i].name,
       experience : req.body.skills[i].experience
        });
       }
