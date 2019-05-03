@@ -6,9 +6,10 @@ const config = require('../config/database');
 const trainingSchema = mongoose.Schema({
     training : [{
         title : String,
-        completionYear : String,
+        status : String,
         duration : String,
-        file: String
+        start_date: String,
+        end_date: String
          }],
          userId: String   
 });

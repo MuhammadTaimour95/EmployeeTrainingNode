@@ -251,6 +251,19 @@ router.post('/addOrganization', (req, res, next) => {
     }
   });
 });
+function stringToDate(_date,_format,_delimiter)
+{
+            var formatLowerCase=_format.toLowerCase();
+            var formatItems=formatLowerCase.split(_delimiter);
+            var dateItems=_date.split(_delimiter);
+            var monthIndex=formatItems.indexOf("mm");
+            var dayIndex=formatItems.indexOf("dd");
+            var yearIndex=formatItems.indexOf("yyyy");
+            var month=parseInt(dateItems[monthIndex]);
+            month-=1;
+            var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+            return formatedDate;
+}
 
 
 //Add Training
@@ -271,12 +284,23 @@ router.post('/addTraining', (req, res, next) => {
     }
 });
 
+
+
   for (i = 0; i < req.body.training.length; i++) { 
+    
+   startDate =  stringToDate(req.body.training[i].start_date,"dd/MM/yyyy","/");
+   endDate = stringToDate(req.body.training[i].end_date,"dd/MM/yyyy","/");
+   const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 31)); 
+
+    console.log(diffDays);
+
     newTraining.training.push({
       title : req.body.training[i].title,
-      completionYear : req.body.training[i].completionYear,
-      duration : req.body.training[i].duration,
-      file : req.body.training[i].file
+      status : req.body.training[i].status,
+      duration : diffDays +" months.",
+      start_date : req.body.training[i].start_date,
+      end_date: req.body.training[i].end_date
        });
       }
 
